@@ -3,7 +3,7 @@ project(orbslam3_odometry)
 
 # You should set the PYTHONPATH to your own python site-packages path
 # set(ENV{PYTHONPATH} "/usr/lib/python2.7/dist-packages/")
-set(ENV{PYTHONPATH} "/opt/ros/foxy/lib/python3.8/site-packages/")
+set(ENV{PYTHONPATH} "/opt/ros/humble/lib/python3.10/site-packages/")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -34,6 +34,7 @@ include_directories(
   include
   ${ORB_SLAM3_ROOT_DIR}/include
   ${ORB_SLAM3_ROOT_DIR}/include/CameraModels
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 link_directories(
@@ -42,13 +43,14 @@ link_directories(
 
 add_executable(orbslam3_odometry
   src/stereo/stereo.cpp
-  src/monocular/monocular.cpp
+  # src/monocular/monocular.cpp
   src/main_node.cpp
-  src/stereo/just_check_stereo_calibration.cpp
-  src/stereo/stereo_rectification.cpp
+  # src/stereo/just_check_stereo_calibration.cpp
+  # src/stereo/stereo_rectification.cpp
 )
-ament_target_dependencies(orbslam3_odometry rclcpp sensor_msgs cv_bridge message_filters ORB_SLAM3 Pangolin nav_msgs yaml-cpp)
+ament_target_dependencies(orbslam3_odometry rclcpp sensor_msgs cv_bridge message_filters ORB_SLAM3 Pangolin nav_msgs yaml-cpp tf2_geometry_msgs)
 
+target_link_libraries(orbslam3_odometry ${OpenCV_LIBRARIES})
 
 install(TARGETS orbslam3_odometry DESTINATION lib/${PROJECT_NAME})
 

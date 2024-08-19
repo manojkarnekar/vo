@@ -29,7 +29,7 @@ public:
 
         if (isTakingPicture) {
             if (!directory_exists(path) || !directory_exists(pathLeft) || !directory_exists(pathRight) ) {
-                RCLCPP_ERROR(this->get_logger(), "Directory " + path + " oppure " + pathLeft +  " oppure " + pathRight +" Non essitono. Crearle: mkdir -p "+ pathLeft + " ; mkdir -p "+ pathRight);
+                // RCLCPP_ERROR(this->get_logger(), "Directory " + path + " oppure " + pathLeft +  " oppure " + pathRight +" Non essitono. Crearle: mkdir -p "+ pathLeft + " ; mkdir -p "+ pathRight);
                 exit(1);
             }
 

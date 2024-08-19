@@ -4,17 +4,17 @@
 #include <chrono>
 
 // If defined the node will print debug information and will show disparity map
-//#define DEBUG
+#define DEBUG
 
 // If defined, it will pre-rectify images, before giving it in input to orbslam.
 // It should be enables for Basler and disabled for stereo-camera like Zed
-#define PRE_RECTIFY_IMAGES
+// #define PRE_RECTIFY_IMAGES
 
 // If defined, the pointcloud created by orbslam will be published
 //#define PUBLISH_POINT_CLOUD
 
 // To have debug prints, comment this line:
-#define RCLCPP_INFO(...) (void)0
+// #define RCLCPP_INFO(...) (void)0
 
 
 using std::placeholders::_1;
@@ -107,11 +107,11 @@ StereoSlamNode::StereoSlamNode(ORB_SLAM3::System *pSLAM, const string &strSettin
 
 StereoSlamNode::~StereoSlamNode()
 {
-    RCLCPP_INFO(this->get_logger(), "Number of left images arrived:\t" + std::to_string(contImageLeft));
-    RCLCPP_INFO(this->get_logger(), "Number of right images arrived:\t" + std::to_string(contImageRight));
-    RCLCPP_INFO(this->get_logger(), "Number of TrackStereo calls:\t" + std::to_string(contTrackStereo));
-    RCLCPP_INFO(this->get_logger(), "First timestamp of left image:\t" + std::to_string(firstTimeStampLeft));
-    RCLCPP_INFO(this->get_logger(), "Last timestamp of left image:\t" + std::to_string(lastTimeStampLeft));
+    // RCLCPP_INFO(this->get_logger(), "Number of left images arrived:\t" + std::to_string(contImageLeft));
+    // RCLCPP_INFO(this->get_logger(), "Number of right images arrived:\t" + std::to_string(contImageRight));
+    // RCLCPP_INFO(this->get_logger(), "Number of TrackStereo calls:\t" + std::to_string(contTrackStereo));
+    // RCLCPP_INFO(this->get_logger(), "First timestamp of left image:\t" + std::to_string(firstTimeStampLeft));
+    // RCLCPP_INFO(this->get_logger(), "Last timestamp of left image:\t" + std::to_string(lastTimeStampLeft));
     
     // Stop all threads
     m_SLAM->Shutdown();

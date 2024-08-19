@@ -5,12 +5,10 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "stereo/stereo.hpp" //  TODO forse metti in include
-#include "stereo/just_check_stereo_calibration.cpp"
-#include "monocular/monocular.hpp"
 #include "System.h"
 #include <signal.h>
 
-#define DEBUG false
+#define DEBUG true
 
 void handleSignal(int signal)
 {
@@ -28,7 +26,7 @@ public:
     {
         /* ***** DECLARING PARAMETERS ***** */
 
-        this->declare_parameter("pangolin_visualization", true);
+        this->declare_parameter("pangolin_visualization", false);
         this->declare_parameter("path_vocabulary", "");
         this->declare_parameter("path_yaml_settings", "");
         this->declare_parameter("system_mode", "");
@@ -50,30 +48,15 @@ public:
 
         if (DEBUG)
             printDebug();
+
+
+        RCLCPP_INFO(this->get_logger(), "Initializing stereo");
+        ORB_SLAM3::System pSLAM(path_vocabulary, path_settings, ORB_SLAM3::System::STEREO, pangolin_visualization);
+        RCLCPP_INFO(this->get_logger(), "after Initializing stereo");
+        auto node = std::make_shared<StereoSlamNode>(&pSLAM, path_settings);
+        rclcpp::spin(node);
+        return;
         
-        if (just_check_stereo_calibration || just_take_picture){
-            RCLCPP_INFO(this->get_logger(), "CHECKING STEREO RECTIFICATION OR TAKING PICTURE. ORB-SLAM WILL NOT START");
-
-            auto node = std::make_shared<JustCheckStereoCalibration>(path_settings);
-            rclcpp::spin(node);
-            return;
-        } else 
-            RCLCPP_INFO(this->get_logger(), "NON CHECKING STEREO RECTIFICATION");
-
-        if (system_mode == "mono")
-        {
-            ORB_SLAM3::System pSLAM(path_vocabulary, path_settings, ORB_SLAM3::System::MONOCULAR, pangolin_visualization);
-            auto node = std::make_shared<MonocularSlamNode>(&pSLAM);
-            rclcpp::spin(node);
-            return;
-        }
-        else if (system_mode == "stereo")
-        {
-            ORB_SLAM3::System pSLAM(path_vocabulary, path_settings, ORB_SLAM3::System::STEREO, pangolin_visualization);
-            auto node = std::make_shared<StereoSlamNode>(&pSLAM, path_settings);
-            rclcpp::spin(node);
-            return;
-        }
     }
 
 private:
